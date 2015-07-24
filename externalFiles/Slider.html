@@ -18,52 +18,100 @@
 	cursor:pointer;
 }
 #info{
+	text-align: center;
 	width:200px;
 	height:25px;
-	border:1px solid black;	
+	<!--border:1px solid black;-->
 }
 </style>
 
 <script type="text/javascript">
 var bar, slider;
+var scores = [];
 function init(){
-	
 	bar = document.getElementById('bar');
 	slider = document.getElementById('slider');
 	info = document.getElementById('info');
 	bar.addEventListener('mousedown', startSlide, false);	
 	bar.addEventListener('mouseup', stopSlide, false);
+	slider.style.width = (50)+'%';
 }
 function startSlide(event){
-	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(2));
+	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(5));
 	info.innerHTML = Math.round(-10+20*set_perc);	
 	bar.addEventListener('mousemove', moveSlide, false);	
 	slider.style.width = (set_perc * 100) + '%';	
 }
 function moveSlide(event){
-	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(2));
+	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(5));
 	info.innerHTML = Math.round(-10+20*set_perc);	
 	slider.style.width = (set_perc * 100) + '%';
 }
 function stopSlide(event){
-	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(2));
+	var set_perc = ((((event.clientX - bar.offsetLeft) / bar.offsetWidth)).toFixed(5));
 	info.innerHTML = Math.round(-10+20*set_perc);	
 	bar.removeEventListener('mousemove', moveSlide, false);
 	slider.style.width = (set_perc * 100) + '%';
+}
+function submit(event)
+{
+		scores[scores.length] =info.innerHTML;
+		submittedValue.innerHTML = info.innerHTML;
+		submittedValue.innerHTML = info.innerHTML;
+}
+function totalScore(event)
+{
+	var totalScoreVal = 0;
+	for(i=0;i<scores.length;i++)
+	{
+		totalScoreVal += parseInt(scores[i],10);
+	}
+	sumTotal.innerHTML = totalScoreVal; 
+	comboMessage();
+}
+function comboMessage(event)
+{
+	var tenCount =0;
+	var sliderMessageText = "";
+	for(i=0;i<scores.length;i++)
+	{
+		if(scores[i] == 10)
+		{
+			tenCount+=1;
+		}
+	}
+	switch(tenCount)
+	{
+		case 3:
+			sliderMessageText = "BantaSourous";
+		break;
+		case 5:
+			sliderMessageText = "BantaKill";
+		break;
+	}
+	if(tenCount != scores.length)
+	{
+		sliderMessageText = "BantaBreak";
+	}
+	sliderMessage.innerHTML = sliderMessageText;	
 }
 </script>
 
 </head>
 <body onload='init()'>
-
+<div id='info'>0</div>
 <div id='bar'>
 <div id='slider'>
 
 </div>
 </div>
 <br />
-
-<div id='info'>info</div>
-
+<button onclick='submit()' >Submit Banter Value</button>
+<button onclick='totalScore()' >Total</button>
+<div id='submittedValue'>0</div>
+<br/>
+<div> Total Score: </div><div id='sumTotal'>0 </div>
+<br/>
+<div id="sliderMessage"> </div>
 </body>
 </html>
